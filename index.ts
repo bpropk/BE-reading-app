@@ -47,7 +47,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 /* listener  */
 const start = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/e-wallet");
+    await mongoose.connect("mongodb://localhost:27017/reading-app");
     mongoose.set("debug", true);
     await seeder.seedUser();
     await seeder.seedCard();

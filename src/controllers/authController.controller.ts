@@ -27,10 +27,7 @@ async function login(req: Request, res: Response) {
     if (user) {
       const isValidPassword = bcrypt.compareSync(password, user.password);
       if (isValidPassword) {
-        // if (user.changePassword === false) {
-        //   return res.status(401).send({ message: "Xin vui lòng đổi mật khẩu" });
-        // }
-        const token = jwt.sign(
+        const token = await jwt.sign(
           {
             role: user.role,
             username: user.username,
@@ -41,52 +38,17 @@ async function login(req: Request, res: Response) {
           process.env.SECRET,
           { expiresIn: 24 * 60 * 60 }
         );
-        user.lock.lockWrongPassword = 0;
-        user.lock.lockCount = 0;
+
         await user.save();
         return res.status(200).send({
           accessToken: token,
         });
       }
-      if (moment(user.lock.date).valueOf() > moment(new Date()).valueOf()) {
-        return res.status(401).send({
-          message:
-            "Tài khoản hiện đang bị tạm khóa, vui lòng thử lại sau 1 phút",
-        });
-      }
-
-      if (user.status === UserStatus.Locked) {
-        return res.status(401).send({
-          message:
-            "Tài khoản đã bị khóa do nhập sai mật khẩu nhiều lần, vui lòng liên hệ quản trị viên để được hỗ trợ",
-        });
-      }
-
-      if (user.lock.lockWrongPassword === 3 && user.lock.lockCount === 1) {
-        user.status = UserStatus.Locked;
-        await user.save();
-        return res.status(401).send({
-          message:
-            "Tài khoản đã bị khóa do nhập sai mật khẩu nhiều lần, vui lòng liên hệ quản trị viên để được hỗ trợ",
-        });
-      }
-      if (user.lock.lockWrongPassword === 3) {
-        user.lock.lockCount = 1;
-        user.lock.lockWrongPassword = 0;
-        user.lock.date = moment(user.lock.date).add(1, "minutes").toDate();
-        await user.save();
-        return res.status(401).send({
-          message:
-            "Tài khoản hiện đang bị tạm khóa, vui lòng thử lại sau 1 phút",
-        });
-      }
-      user.lock.lockWrongPassword += 1;
-
-      await user.save();
-      return res.status(401).send({ message: "Mật khẩu không chính xác" });
     }
     return res.status(401).send({ message: "Tài khoản không hợp lệ" });
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function create(req: Request, res: Response) {
