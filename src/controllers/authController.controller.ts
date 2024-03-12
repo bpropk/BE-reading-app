@@ -45,7 +45,8 @@ async function login(req: Request, res: Response) {
         });
       }
     }
-    return res.status(401).send({ message: "Tài khoản không hợp lệ" });
+
+    return res.status(401).send({ message: "This account is invalid" });
   } catch (error) {
     throw error;
   }
