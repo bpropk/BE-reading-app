@@ -83,6 +83,10 @@ async function create(req: Request, res: Response) {
       process.env.SECRET,
       { expiresIn: 24 * 60 * 60 }
     );
+
+    return res.status(200).send({
+      accessToken: token,
+    });
   } catch (error) {
     console.log(error);
     return res.status(409).send({ message: "Tài khoản đã tồn tại" });
