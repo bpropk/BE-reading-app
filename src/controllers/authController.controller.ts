@@ -58,7 +58,7 @@ async function create(req: Request, res: Response) {
   try {
     await User.create({
       phone,
-      email,
+      email: email.toLowerCase(),
       name,
       address,
       username,
@@ -127,7 +127,7 @@ async function changePassword(req: Request, res: Response) {
 async function forgotPassword(req: Request, res: Response) {
   const { email, phone } = req.body;
   const user = await User.findOne({
-    email,
+    email: email.toLowerCase(),
   });
 
   if (user) {
@@ -161,10 +161,10 @@ async function forgotPassword(req: Request, res: Response) {
 }
 
 async function verifyForgotPassword(req: Request, res: Response) {
-  const { email, phone, otp, newPassword } = req.body;
+  const { email, otp, newPassword } = req.body;
+
   const user = await User.findOne({
-    email,
-    phone,
+    email: email.toLowerCase(),
   });
   if (user && user.phoneOtp === otp) {
     const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
