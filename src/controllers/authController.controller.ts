@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
-import { rmSync } from "fs";
 import * as jwt from "jsonwebtoken";
 const { User } = require("@schemas/users");
 const bcrypt = require("bcrypt");
-const random = require("randomstring");
-const moment = require("moment");
+
 const { UserRole, UserStatus } = require("../utils/enum/user");
 const nodemailer = require("nodemailer");
 const { generateOTP } = require("../utils/otp/otp");
@@ -53,8 +51,7 @@ async function login(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-  const { phone, email, name, dateOfBirth, address, password, username } =
-    req.body;
+  const { phone, email, name, address, password, username } = req.body;
 
   const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
   const hashPassword = await bcrypt.hashSync(password.toString(), salt);
@@ -63,7 +60,6 @@ async function create(req: Request, res: Response) {
       phone,
       email,
       name,
-      dateOfBirth: new Date(dateOfBirth),
       address,
       username,
       password: hashPassword,
@@ -132,7 +128,6 @@ async function forgotPassword(req: Request, res: Response) {
   const { email, phone } = req.body;
   const user = await User.findOne({
     email,
-    phone,
   });
 
   if (user) {
