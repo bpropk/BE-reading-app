@@ -53,17 +53,8 @@ async function login(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-  const { phone, email, name, dateOfBirth, address } = req.body;
-  // username là một dãy gồm 10 chữ số từ 0-9,
-  // password chuỗi bất kỳ gồm 6 ký tự.'
-  const username = random.generate({
-    length: 10,
-    charset: "numeric",
-  });
-  const password = random.generate({
-    length: 6,
-    charset: "hex",
-  });
+  const { phone, email, name, dateOfBirth, address, password, username } =
+    req.body;
 
   const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
   const hashPassword = await bcrypt.hashSync(password.toString(), salt);
@@ -81,19 +72,7 @@ async function create(req: Request, res: Response) {
       status: UserStatus.Unactive,
       currentbudget: 0,
     });
-    const mailOptions = {
-      from: "Bbinhtony@gmail.com",
-      to: email,
-      subject: `Tài khoảng của bạn`,
-      html: `
-        <div style="padding: 10px; background-color: white;">
-            <h4 style="color: #0085ff">Cảm ơn bạn đã sử dụng ví điện tử</h4>
-            <span style="color: black">Đây là username và password của bạn</span>
-            <p style="color: black">username: ${username} </p>
-            <p style="color: black">password: ${password}</p>
-        </div>
-      `,
-    };
+
     const token = jwt.sign(
       {
         role: UserRole.User,
@@ -104,18 +83,6 @@ async function create(req: Request, res: Response) {
       process.env.SECRET,
       { expiresIn: 24 * 60 * 60 }
     );
-
-    await transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).send(err);
-      }
-      return res.status(200).send({
-        username,
-        password,
-        token,
-      });
-    });
   } catch (error) {
     console.log(error);
     return res.status(409).send({ message: "Tài khoản đã tồn tại" });
@@ -175,7 +142,7 @@ async function forgotPassword(req: Request, res: Response) {
       subject: `OTP code của số điện thoại ${phone}`,
       html: `
         <div style="padding: 10px; background-color: white;">
-            <h4 style="color: #0085ff">Cảm ơn bạn đã sử dụng ví điện tử</h4>
+            <h4 style="color: #0085ff">Cảm ơn bạn đã sử dụng ứng dụng đọc sách</h4>
             <span style="color: black">Đây là otp code bạn :${otp}</span>
         </div>
       `,
