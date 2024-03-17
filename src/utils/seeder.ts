@@ -3,11 +3,9 @@ import mongoose from "mongoose";
 
 const user = require("@schemas/users");
 const card = require("@schemas/cards");
-const audit = require("@schemas/audits");
 
 const userModel = mongoose.model("user", user.UserSchema);
 const cardModel = mongoose.model("card", card.CardSchema);
-const auditModel = mongoose.model("audit", audit.AuditSchema);
 
 const { UserRole, UserStatus } = require("../utils/enum/user");
 const bcrypt = require("bcrypt");

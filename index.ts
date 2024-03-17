@@ -28,9 +28,12 @@ app.use(multer().array());
 const auth = require("@routes/authentication");
 const admin = require("@routes/admin");
 const user = require("@routes/user");
+const book = require("@routes/book");
+
 app.use("/auth", auth);
 app.use("/admin", admin);
 app.use("/user", user);
+app.use("/book", book);
 
 /* seeder */
 const seeder = require("@utils/seeder");
