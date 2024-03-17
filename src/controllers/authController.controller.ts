@@ -89,41 +89,6 @@ async function create(req: Request, res: Response) {
   }
 }
 
-async function changePassword(req: Request, res: Response) {
-  const { username, password, newPassword } = req.body;
-  const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
-  const hashPassword = await bcrypt.hashSync(newPassword, salt);
-  try {
-    const user = await User.findOne({ username });
-    if (user) {
-      const isValidPassword = await bcrypt.compareSync(password, user.password);
-      if (isValidPassword) {
-        const token = await jwt.sign(
-          {
-            role: user.role,
-            username,
-            id: user._id,
-            changePassword: false,
-          },
-          process.env.SECRET,
-          { expiresIn: 24 * 60 * 60 }
-        );
-        user.password = hashPassword;
-        user.changePassword = false;
-        await user.save();
-        return res.status(200).send({
-          message: "Đổi mật khẩu thành công",
-          token,
-        });
-      }
-      return res.status(409).send({ message: "Tài khoản không hợp lệ" });
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(409).send({ message: "Tài khoản không hợp lệ" });
-  }
-}
-
 async function forgotPassword(req: Request, res: Response) {
   const { email, phone } = req.body;
   const user = await User.findOne({
@@ -188,6 +153,41 @@ async function verifyForgotPassword(req: Request, res: Response) {
     });
   }
   return res.status(400).send({ message: "Mã OTP không hợp lệ" });
+}
+
+async function changePassword(req: Request, res: Response) {
+  const { username, password, newPassword } = req.body;
+  const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
+  const hashPassword = await bcrypt.hashSync(newPassword, salt);
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      const isValidPassword = await bcrypt.compareSync(password, user.password);
+      if (isValidPassword) {
+        const token = await jwt.sign(
+          {
+            role: user.role,
+            username,
+            id: user._id,
+            changePassword: false,
+          },
+          process.env.SECRET,
+          { expiresIn: 24 * 60 * 60 }
+        );
+        user.password = hashPassword;
+        user.changePassword = false;
+        await user.save();
+        return res.status(200).send({
+          message: "Đổi mật khẩu thành công",
+          token,
+        });
+      }
+      return res.status(409).send({ message: "Tài khoản không hợp lệ" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(409).send({ message: "Tài khoản không hợp lệ" });
+  }
 }
 
 module.exports = {
