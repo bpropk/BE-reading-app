@@ -1,9 +1,9 @@
 import * as jwt from "jsonwebtoken";
 
 const Minio = require("minio");
-
 const { User } = require("@schemas/users");
 const { Book } = require("@schemas/books");
+const fs = require("fs");
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -24,16 +24,20 @@ function cloneIllustration(data) {
   const bucketName = srcIlu[0];
   const objectName = srcIlu[1];
   // download illustration to BE
-  minioClient.fGetObject(
-    bucketName,
-    objectName,
-    "downloads/" + objectName,
-    function (err) {
-      if (err) {
-        return console.log(err);
+
+  if (!fs.existsSync("downloads/" + objectName)) {
+    minioClient.fGetObject(
+      bucketName,
+      objectName,
+      "downloads/" + objectName,
+      function (err) {
+        if (err) {
+          return console.log(err);
+        }
       }
-    }
-  );
+    );
+  }
+
   return {
     bucketName,
     objectName,
