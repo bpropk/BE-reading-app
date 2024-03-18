@@ -27,7 +27,6 @@ async function getAllBookInfo(req, res) {
 }
 
 async function getBookDetail(req, res) {
-  var size = 0;
   const file = minioClient.fGetObject(
     "reading-bucket",
     "haggard-allans-wife(fantasy).epub",
