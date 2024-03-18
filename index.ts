@@ -53,8 +53,13 @@ const start = async () => {
   try {
     await mongoose.connect("mongodb://localhost:27017/reading-app");
     mongoose.set("debug", true);
+
+    // seedUser
     await seeder.seedUser();
-    await seeder.seedCard();
+
+    // seedBook
+    await seeder.seedBooks();
+
     app.listen(port, "0.0.0.0", () => {
       console.log(`Example app listening at http://localhost:${port}`);
     });

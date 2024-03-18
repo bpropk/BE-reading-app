@@ -2,12 +2,14 @@ import { addDays } from "date-fns";
 import mongoose from "mongoose";
 
 const user = require("@schemas/users");
-const card = require("@schemas/cards");
+const book = require("@schemas/books");
 
 const userModel = mongoose.model("user", user.UserSchema);
-const cardModel = mongoose.model("card", card.CardSchema);
+const bookModel = mongoose.model("book", book.BookSchema);
 
 const { UserRole, UserStatus } = require("../utils/enum/user");
+const { BookSubject } = require("../utils/enum/book");
+
 const bcrypt = require("bcrypt");
 
 async function seedUser() {
@@ -47,44 +49,28 @@ async function seedUser() {
   }
 }
 
-async function seedCard() {
+async function seedBooks() {
   try {
-    await cardModel.create({
-      id: 111111,
-      expiredDate: new Date("10/10/2022"),
-      secretCode: 411,
-      cash: "5000000",
+    await bookModel.create({
+      title: "Darkwater",
+      author: "W. E. B. Du Bois",
+      description:
+        "The distinguished American civil rights leader, Du Bois first published these fiery essays, sketches, and poems individually nearly 100 years ago in the Atlantic, the Journal of Race Development, and other periodicals. Reflecting the author’s ideas as a politician, historian, and artist, this volume has long moved and inspired readers with its militant cry for social, political, and economic reforms for black Americans. Essential reading for students of African-American history.",
+      subject: BookSubject.History,
+      epub: "reading-bucket/bois-darkwater(history).epub",
+      illustration: "illustration/darkwater.jpg",
+      star: 0,
+      numberReview: 0,
+      price: 10.1,
     });
   } catch (error) {
-    console.log("Card have been add");
-  }
-
-  try {
-    await cardModel.create({
-      id: 222222,
-      expiredDate: addDays(new Date(), 30),
-      secretCode: 443,
-      cash: "5000000",
-    });
-  } catch (error) {
-    console.log("Card have been add");
-  }
-
-  try {
-    await cardModel.create({
-      id: 333333,
-      expiredDate: addDays(new Date(), 30),
-      secretCode: 577,
-      cash: "5000000",
-    });
-  } catch (error) {
-    console.log("Card have been add");
+    console.log("Book have been add");
   }
 }
 
 module.exports = {
   seedUser,
-  seedCard,
+  seedBooks,
 };
 
 export {};

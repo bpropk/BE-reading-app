@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
 const BookSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-  },
   title: String,
+  author: String,
+  description: String,
+  subject: String,
+
   illustration: String,
+  epub: String,
+
   star: Number,
   numberReview: Number,
   price: Number,
-  author: String,
 });
 
 const Book = mongoose.model("book", BookSchema);
