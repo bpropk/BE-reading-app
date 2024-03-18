@@ -1,6 +1,7 @@
-import { param } from "express-validator";
+import * as jwt from "jsonwebtoken";
 const Minio = require("minio");
 const { Book } = require("@schemas/books");
+const { User } = require("@schemas/users");
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -81,7 +82,7 @@ async function readBook(req, res) {
   res.download(fileDownload);
 }
 
-async function BookDetailInfo(req, res) {
+async function bookDetailInfo(req, res) {
   try {
     var record = await Book.findOne(
       {
@@ -107,10 +108,43 @@ async function BookDetailInfo(req, res) {
   }
 }
 
+async function addLibrary(req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const userId = decodedToken.id;
+  const user = await User.findById({
+    _id: userId,
+  });
+
+  const book = await Book.findOne({
+    _id: req.body.id,
+  });
+
+  console.log("user", user);
+  console.log("book", book);
+
+  const checkExist = user.library.every((item) => {
+    return item._id === book._id;
+  });
+
+  if (checkExist) {
+    user.library = [...user.library, book];
+    await user.save();
+    return res.status(200).send({
+      message: "add library success",
+    });
+  } else {
+    return res.status(200).send({
+      message: "library already add",
+    });
+  }
+}
+
 module.exports = {
   getAllBookInfo,
   readBook,
-  BookDetailInfo,
+  bookDetailInfo,
+  addLibrary,
 };
 
 export {};

@@ -13,12 +13,16 @@ router.get(
   "/detail/:id",
   authMiddleware.userAuth,
   (req: Request, res: Response) => {
-    bookController.BookDetailInfo(req, res);
+    bookController.bookDetailInfo(req, res);
   }
 );
 
 router.get("/detail.epub", (req: Request, res: Response) => {
   bookController.readBook(req, res);
+});
+
+router.post("/add", (req: Request, res: Response) => {
+  bookController.addLibrary(req, res);
 });
 
 module.exports = router;

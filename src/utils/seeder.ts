@@ -37,6 +37,7 @@ async function seedUser() {
       role: UserRole.User,
       status: UserStatus.Active,
       currentbudget: 0,
+      library: [],
       lock: {
         lockCount: 0,
         lockWrongPassword: 0,

@@ -27,6 +27,13 @@ const UserSchema = new mongoose.Schema(
     changePassword: Boolean,
     currentbudget: Number,
     phoneOtp: String,
+    library: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "book",
+        default: [],
+      },
+    ],
   },
   { timestamps: true }
 );
