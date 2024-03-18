@@ -1,4 +1,6 @@
+import { param } from "express-validator";
 const Minio = require("minio");
+const { Book } = require("@schemas/books");
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -8,23 +10,20 @@ const minioClient = new Minio.Client({
   secretKey: "FgqAoJ1IqMvny7X43pgiX2NQPEXhj8d6msjdGi6P",
 });
 
-var data: string[] = [];
-
 async function getAllBookInfo(req, res) {
-  const stream = minioClient.listObjects("reading-bucket", "", false);
-  stream.on("data", function (obj) {
-    data.push(obj);
-  });
-  stream.on("end", function (obj) {
-    return res.status(200).send({
-      data: data,
+  try {
+    const book = await Book.find({
+      subject: req.params["subject"],
     });
-  });
-  stream.on("error", function (err) {
+
     return res.status(200).send({
-      error: err,
+      data: book,
     });
-  });
+  } catch (err) {
+    return res.status(400).send({
+      message: err,
+    });
+  }
 }
 
 async function getBookDetail(req, res) {

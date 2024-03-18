@@ -1,9 +1,9 @@
 const BookSubject = {
-  History: "History",
-  Fantasy: "Fantasy",
-  Romance: "Romance",
-  Biography: "Biography",
-  ActionAndAdventure: "ActionAndAdventure",
+  History: "history",
+  Fantasy: "fantasy",
+  Romance: "romance",
+  Biography: "biography",
+  Adventure: "adventure",
 };
 
 module.exports = { BookSubject };

@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const bookController = require("@controllers/bookController.controller");
 
-router.get("/", (req: Request, res: Response) => {
+router.get("/:subject", (req: Request, res: Response) => {
   bookController.getAllBookInfo(req, res);
 });
 

@@ -1,4 +1,3 @@
-import { addDays } from "date-fns";
 import mongoose from "mongoose";
 
 const user = require("@schemas/users");
