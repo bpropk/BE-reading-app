@@ -10,7 +10,7 @@ router.get("/list/", authMiddleware.userAuth, (req: Request, res: Response) => {
 });
 
 router.get("/detail.epub", (req: Request, res: Response) => {
-  bookController.getBookDetail(req, res);
+  bookController.readBook(req, res);
 });
 
 module.exports = router;

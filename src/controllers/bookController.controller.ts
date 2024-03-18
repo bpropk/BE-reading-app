@@ -55,7 +55,7 @@ async function getAllBookInfo(req, res) {
   }
 }
 
-async function getBookDetail(req, res) {
+async function readBook(req, res) {
   // Get Book Detail from Minio
   const file = minioClient.fGetObject(
     "reading-bucket",
@@ -75,7 +75,7 @@ async function getBookDetail(req, res) {
 
 module.exports = {
   getAllBookInfo,
-  getBookDetail,
+  readBook,
 };
 
 export {};
