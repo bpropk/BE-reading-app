@@ -10,24 +10,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    name: {
-      type: String,
-    },
+    name: String,
     dateOfBirth: {
       type: Date,
     },
-    address: {
-      type: String,
-    },
-    username: {
-      type: String,
-    },
-    password: {
-      type: String,
-    },
-    status: {
-      type: String,
-    },
+    address: String,
+    username: String,
+    password: String,
+    status: String,
     lock: {
       lockCount: { type: Number },
       lockWrongPassword: { type: Number },
