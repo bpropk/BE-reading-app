@@ -17,11 +17,12 @@ router.get(
   }
 );
 
+// Reed book url
 router.get("/detail.epub", (req: Request, res: Response) => {
   bookController.readBook(req, res);
 });
 
-router.post("/add", (req: Request, res: Response) => {
+router.post("/add", authMiddleware.userAuth, (req: Request, res: Response) => {
   bookController.addLibrary(req, res);
 });
 

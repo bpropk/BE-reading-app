@@ -1,6 +1,9 @@
-const { Book } = require("@schemas/books");
-const utils = require("@utils/index");
+import * as jwt from "jsonwebtoken";
+
 const Minio = require("minio");
+
+const { User } = require("@schemas/users");
+const { Book } = require("@schemas/books");
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -35,6 +38,16 @@ function cloneIllustration(data) {
     bucketName,
     objectName,
   };
+}
+
+async function getUser(req) {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const userId = decodedToken.id;
+  const user = await User.findById({
+    _id: userId,
+  }).populate("library");
+  return user;
 }
 
 async function getAllBookInfo(req, res) {
@@ -115,26 +128,25 @@ async function bookDetailInfo(req, res) {
 }
 
 async function addLibrary(req, res) {
-  const user = await utils.getUser(req);
-  const book = await Book.findOne({
+  var user = await getUser(req);
+
+  console.log("req.body.id", req.body.id);
+  const book = await Book.findById({
     _id: req.body.id,
   });
 
-  console.log("user", user);
-  console.log("book", book);
+  const notExist = user.library.every(
+    (item) => item._id.toString() !== book._id.toString()
+  );
 
-  const checkExist = user.library.every((item) => {
-    return item._id === book._id;
-  });
-
-  if (checkExist) {
+  if (notExist) {
     user.library = [...user.library, book];
     await user.save();
     return res.status(200).send({
       message: "add library success",
     });
   } else {
-    return res.status(200).send({
+    return res.status(400).send({
       message: "library already add",
     });
   }
