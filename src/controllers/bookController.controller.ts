@@ -1,7 +1,6 @@
-import * as jwt from "jsonwebtoken";
-const Minio = require("minio");
 const { Book } = require("@schemas/books");
-const { User } = require("@schemas/users");
+const utils = require("@utils/index");
+const Minio = require("minio");
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -10,28 +9,6 @@ const minioClient = new Minio.Client({
   accessKey: "WjG7DdcTeGFHHjxbJuwI",
   secretKey: "FgqAoJ1IqMvny7X43pgiX2NQPEXhj8d6msjdGi6P",
 });
-
-// Get illustration from bucket Minio
-function cloneIllustration(data) {
-  const srcIlu = data.split("/");
-  const bucketName = srcIlu[0];
-  const objectName = srcIlu[1];
-  // download illustration to BE
-  minioClient.fGetObject(
-    bucketName,
-    objectName,
-    "downloads/" + objectName,
-    function (err) {
-      if (err) {
-        return console.log(err);
-      }
-    }
-  );
-  return {
-    bucketName,
-    objectName,
-  };
-}
 
 async function getAllBookInfo(req, res) {
   try {
@@ -47,7 +24,7 @@ async function getAllBookInfo(req, res) {
     }
 
     const records = queryResult.map((record) => {
-      const { objectName } = cloneIllustration(record.illustration);
+      const { objectName } = utils.cloneIllustration(record.illustration);
       return {
         ...record,
         illustration: "http://localhost:3200/public/" + objectName,
@@ -92,7 +69,7 @@ async function bookDetailInfo(req, res) {
       { lean: true }
     );
 
-    const { objectName } = cloneIllustration(record.illustration);
+    const { objectName } = utils.cloneIllustration(record.illustration);
     record = {
       ...record,
       illustration: "http://localhost:3200/public/" + objectName,
@@ -109,13 +86,7 @@ async function bookDetailInfo(req, res) {
 }
 
 async function addLibrary(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  const userId = decodedToken.id;
-  const user = await User.findById({
-    _id: userId,
-  });
-
+  const user = await utils.getUser(req);
   const book = await Book.findOne({
     _id: req.body.id,
   });
