@@ -9,6 +9,14 @@ router.get("/list/", authMiddleware.userAuth, (req: Request, res: Response) => {
   bookController.getAllBookInfo(req, res);
 });
 
+router.get(
+  "/detail/:id",
+  authMiddleware.userAuth,
+  (req: Request, res: Response) => {
+    bookController.BookDetailInfo(req, res);
+  }
+);
+
 router.get("/detail.epub", (req: Request, res: Response) => {
   bookController.readBook(req, res);
 });

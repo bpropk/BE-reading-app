@@ -10,6 +10,28 @@ const minioClient = new Minio.Client({
   secretKey: "FgqAoJ1IqMvny7X43pgiX2NQPEXhj8d6msjdGi6P",
 });
 
+// Get illustration from bucket Minio
+function cloneIllustration(data) {
+  const srcIlu = data.split("/");
+  const bucketName = srcIlu[0];
+  const objectName = srcIlu[1];
+  // download illustration to BE
+  minioClient.fGetObject(
+    bucketName,
+    objectName,
+    "downloads/" + objectName,
+    function (err) {
+      if (err) {
+        return console.log(err);
+      }
+    }
+  );
+  return {
+    bucketName,
+    objectName,
+  };
+}
+
 async function getAllBookInfo(req, res) {
   try {
     var queryResult = await Book.find({}, null, { lean: true });
@@ -23,22 +45,8 @@ async function getAllBookInfo(req, res) {
       );
     }
 
-    // Get illustration from bucket Minio
     const records = queryResult.map((record) => {
-      const srcIlu = record.illustration.split("/");
-      const bucketName = srcIlu[0];
-      const objectName = srcIlu[1];
-      // download illustration to BE
-      const file = minioClient.fGetObject(
-        bucketName,
-        objectName,
-        "downloads/" + objectName,
-        function (err) {
-          if (err) {
-            return console.log(err);
-          }
-        }
-      );
+      const { objectName } = cloneIllustration(record.illustration);
       return {
         ...record,
         illustration: "http://localhost:3200/public/" + objectName,
@@ -57,7 +65,7 @@ async function getAllBookInfo(req, res) {
 
 async function readBook(req, res) {
   // Get Book Detail from Minio
-  const file = minioClient.fGetObject(
+  minioClient.fGetObject(
     "reading-bucket",
     "haggard-allans-wife(fantasy).epub",
     "downloads/download.epub",
@@ -73,9 +81,36 @@ async function readBook(req, res) {
   res.download(fileDownload);
 }
 
+async function BookDetailInfo(req, res) {
+  try {
+    var record = await Book.findOne(
+      {
+        _id: req.params.id,
+      },
+      null,
+      { lean: true }
+    );
+
+    const { objectName } = cloneIllustration(record.illustration);
+    record = {
+      ...record,
+      illustration: "http://localhost:3200/public/" + objectName,
+    };
+
+    return res.status(200).send({
+      book: record,
+    });
+  } catch (err) {
+    return res.status(400).send({
+      message: err,
+    });
+  }
+}
+
 module.exports = {
   getAllBookInfo,
   readBook,
+  BookDetailInfo,
 };
 
 export {};
