@@ -5,6 +5,7 @@ moduleAlias.addAliases({
   "@routes": `${__dirname}/src/routes`,
   "@utils": `${__dirname}/src/utils`,
   "@middlewares": `${__dirname}/src/middlewares`,
+  "@downloads": `${__dirname}/downloads`,
 });
 const express = require("express");
 const dotenv = require("dotenv").config();
