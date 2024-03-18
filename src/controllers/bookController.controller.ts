@@ -10,6 +10,27 @@ const minioClient = new Minio.Client({
   secretKey: "FgqAoJ1IqMvny7X43pgiX2NQPEXhj8d6msjdGi6P",
 });
 
+function cloneIllustration(data) {
+  const srcIlu = data.split("/");
+  const bucketName = srcIlu[0];
+  const objectName = srcIlu[1];
+  // download illustration to BE
+  minioClient.fGetObject(
+    bucketName,
+    objectName,
+    "downloads/" + objectName,
+    function (err) {
+      if (err) {
+        return console.log(err);
+      }
+    }
+  );
+  return {
+    bucketName,
+    objectName,
+  };
+}
+
 async function getAllBookInfo(req, res) {
   try {
     var queryResult = await Book.find({}, null, { lean: true });
@@ -24,7 +45,8 @@ async function getAllBookInfo(req, res) {
     }
 
     const records = queryResult.map((record) => {
-      const { objectName } = utils.cloneIllustration(record.illustration);
+      const { objectName } = cloneIllustration(record.illustration);
+
       return {
         ...record,
         illustration: "http://localhost:3200/public/" + objectName,
@@ -69,7 +91,7 @@ async function bookDetailInfo(req, res) {
       { lean: true }
     );
 
-    const { objectName } = utils.cloneIllustration(record.illustration);
+    const { objectName } = cloneIllustration(record.illustration);
     record = {
       ...record,
       illustration: "http://localhost:3200/public/" + objectName,
