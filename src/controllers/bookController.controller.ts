@@ -10,6 +10,12 @@ const minioClient = new Minio.Client({
   secretKey: "FgqAoJ1IqMvny7X43pgiX2NQPEXhj8d6msjdGi6P",
 });
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 function cloneIllustration(data) {
   const srcIlu = data.split("/");
   const bucketName = srcIlu[0];
@@ -64,21 +70,22 @@ async function getAllBookInfo(req, res) {
 }
 
 async function readBook(req, res) {
-  // Get Book Detail from Minio
-  minioClient.fGetObject(
-    "reading-bucket",
-    "haggard-allans-wife(fantasy).epub",
-    "downloads/download.epub",
-    function (err) {
-      if (err) {
-        return console.log(err);
-      }
-    }
+  const record = await Book.findOne(
+    {
+      _id: req.query.id,
+    },
+    null,
+    { lean: true }
   );
 
-  const fileDownload = `downloads/download.epub`;
+  console.log("-------");
+  console.log(record.epub);
 
-  res.download(fileDownload);
+  const { objectName } = await cloneIllustration(record.epub);
+  const fileDownload = `downloads/` + objectName;
+  await sleep(1000);
+
+  return res.download(fileDownload);
 }
 
 async function bookDetailInfo(req, res) {
