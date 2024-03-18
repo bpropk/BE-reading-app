@@ -14,13 +14,17 @@ async function getAllBookInfo(req, res) {
   try {
     var queryResult = await Book.find({}, null, { lean: true });
     if (req.query.subject) {
-      queryResult = await Book.find({ subject: req.query.subject }, null, {
-        lean: true,
-      });
+      queryResult = await Book.find(
+        { subject: req.query.subject.toLowerCase() },
+        null,
+        {
+          lean: true,
+        }
+      );
     }
 
     // Get illustration from bucket Minio
-    const test = queryResult.map((record) => {
+    const records = queryResult.map((record) => {
       const srcIlu = record.illustration.split("/");
       const bucketName = srcIlu[0];
       const objectName = srcIlu[1];
@@ -42,7 +46,7 @@ async function getAllBookInfo(req, res) {
     });
 
     return res.status(200).send({
-      books: test,
+      books: records,
     });
   } catch (err) {
     return res.status(400).send({
