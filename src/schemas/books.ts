@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const BookSchema = new mongoose.Schema({
-  title: String,
+  title: {
+    unique: true,
+    type: String,
+  },
   author: String,
   description: String,
   subject: String,
@@ -15,7 +18,7 @@ const BookSchema = new mongoose.Schema({
 });
 
 const Book = mongoose.model("book", BookSchema);
-BookSchema.index({});
+BookSchema.index({ title: 1, author: 1 }, { unique: true });
 
 module.exports = {
   Book,
