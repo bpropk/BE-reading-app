@@ -12,13 +12,37 @@ const minioClient = new Minio.Client({
 
 async function getAllBookInfo(req, res) {
   try {
-    var queryResult = await Book.find({});
+    var queryResult = await Book.find({}, null, { lean: true });
     if (req.query.subject) {
-      queryResult = await Book.find({ subject: req.query.subject });
+      queryResult = await Book.find({ subject: req.query.subject }, null, {
+        lean: true,
+      });
     }
 
+    // Get illustration from bucket Minio
+    const test = queryResult.map((record) => {
+      const srcIlu = record.illustration.split("/");
+      const bucketName = srcIlu[0];
+      const objectName = srcIlu[1];
+      // download illustration to BE
+      const file = minioClient.fGetObject(
+        bucketName,
+        objectName,
+        "downloads/" + objectName,
+        function (err) {
+          if (err) {
+            return console.log(err);
+          }
+        }
+      );
+      return {
+        ...record,
+        illustration: "http://localhost:3200/public/" + objectName,
+      };
+    });
+
     return res.status(200).send({
-      books: queryResult,
+      books: test,
     });
   } catch (err) {
     return res.status(400).send({
@@ -28,6 +52,7 @@ async function getAllBookInfo(req, res) {
 }
 
 async function getBookDetail(req, res) {
+  // Get Book Detail from Minio
   const file = minioClient.fGetObject(
     "reading-bucket",
     "haggard-allans-wife(fantasy).epub",

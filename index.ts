@@ -24,6 +24,7 @@ app.use(
 );
 app.use(cors());
 app.use(multer().array());
+app.use("/public", express.static("downloads"));
 
 /* routes */
 const auth = require("@routes/authentication");
