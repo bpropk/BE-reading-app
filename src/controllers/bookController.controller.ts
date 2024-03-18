@@ -12,9 +12,10 @@ const minioClient = new Minio.Client({
 
 async function getAllBookInfo(req, res) {
   try {
-    const book = await Book.find({
-      subject: req.params["subject"],
-    });
+    var book = await Book.find({});
+    if (req.query.subject) {
+      book = await Book.find({ subject: req.query.subject });
+    }
 
     return res.status(200).send({
       data: book,
