@@ -60,8 +60,6 @@ async function seedBooks() {
       subject: BookSubject.History,
       epub: "reading-bucket/bois-darkwater(history).epub",
       illustration: "illustration/darkwater.jpg",
-      star: 0,
-      numberReview: 0,
       price: 10.1,
     });
   } catch (error) {
@@ -77,8 +75,6 @@ async function seedBooks() {
       subject: BookSubject.History,
       epub: "reading-bucket/hemingway-death-in-the-afternoon(history).epub",
       illustration: "illustration/death-in-the-afternoon.jpg",
-      star: 0,
-      numberReview: 0,
       price: 14,
     });
   } catch (error) {
@@ -95,8 +91,6 @@ async function seedBooks() {
       subject: BookSubject.History,
       epub: "reading-bucket/machiavelli-discourses-on-livy(history).epub",
       illustration: "illustration/discourses-on-livy.jpg",
-      star: 0,
-      numberReview: 0,
       price: 20,
     });
   } catch (error) {
@@ -112,8 +106,6 @@ async function seedBooks() {
       subject: BookSubject.History,
       epub: "reading-bucket/williams-henry-vii(history).epub",
       illustration: "illustration/henry-vii.jpg",
-      star: 0,
-      numberReview: 0,
       price: 29,
     });
   } catch (error) {
@@ -131,8 +123,6 @@ async function seedBooks() {
       epub: "reading-bucket/twain-a-connecticut-yankee-in-king-arthurs-court(fantasy).epub",
       illustration:
         "illustration/twain-a-connecticut-yankee-in-king-arthurs-court.jpg",
-      star: 0,
-      numberReview: 0,
       price: 5,
     });
   } catch (error) {
@@ -148,8 +138,6 @@ async function seedBooks() {
       subject: BookSubject.Fantasy,
       epub: "reading-bucket/dunsany-a-dreamer-s-tales(fantasy).epub",
       illustration: "illustration/a-dreamer-s-tales.jpg",
-      star: 0,
-      numberReview: 0,
       price: 8,
     });
   } catch (error) {
@@ -165,8 +153,6 @@ async function seedBooks() {
       subject: BookSubject.Fantasy,
       epub: "reading-bucket/haggard-allan-and-the-ice-gods(fantasy).epub",
       illustration: "illustration/allan-and-the-ice-gods.jpg",
-      star: 0,
-      numberReview: 0,
       price: 19,
     });
   } catch (error) {
@@ -182,8 +168,6 @@ async function seedBooks() {
       subject: BookSubject.Fantasy,
       epub: "reading-bucket/haggard-allans-wife(fantasy).epub",
       illustration: "illustration/haggard-allans-wife.jpg",
-      star: 0,
-      numberReview: 0,
       price: 25,
     });
   } catch (error) {
@@ -200,8 +184,6 @@ async function seedBooks() {
       subject: BookSubject.Biography,
       epub: "reading-bucket/williams-bacon(biography).epub",
       illustration: "illustration/bacon.jpg",
-      star: 0,
-      numberReview: 0,
       price: 14,
     });
   } catch (error) {
@@ -217,8 +199,6 @@ async function seedBooks() {
       subject: BookSubject.Biography,
       epub: "reading-bucket/walpole-john-cornelius(biography).epub",
       illustration: "illustration/john-cornelius.jpg",
-      star: 0,
-      numberReview: 0,
       price: 27,
     });
   } catch (error) {
@@ -234,8 +214,6 @@ async function seedBooks() {
       subject: BookSubject.Biography,
       epub: "reading-bucket/woolf-orlando(biography).epub",
       illustration: "illustration/orlando.jpg",
-      star: 0,
-      numberReview: 0,
       price: 11,
     });
   } catch (error) {
@@ -251,8 +229,6 @@ async function seedBooks() {
       subject: BookSubject.Biography,
       epub: "reading-bucket/davis-real-soldiers-of-fortune(biography).epub",
       illustration: "illustration/davis-real-soldiers-of-fortune.jpg",
-      star: 0,
-      numberReview: 0,
       price: 12,
     });
   } catch (error) {
@@ -269,8 +245,6 @@ async function seedBooks() {
       subject: BookSubject.Adventure,
       epub: "reading-bucket/london-a-daughter-of-the-snows(action&adventure).epub",
       illustration: "illustration/london-a-daughter-of-the-snows.jpg",
-      star: 0,
-      numberReview: 0,
       price: 22,
     });
   } catch (error) {
@@ -286,8 +260,6 @@ async function seedBooks() {
       subject: BookSubject.Adventure,
       epub: "reading-bucket/verne-a-voyage-in-a-balloon(action&adventure).epub",
       illustration: "illustration/verne-a-voyage-in-a-balloon.jpg",
-      star: 0,
-      numberReview: 0,
       price: 14,
     });
   } catch (error) {
@@ -303,8 +275,6 @@ async function seedBooks() {
       subject: BookSubject.Adventure,
       epub: "reading-bucket/lamb-adventures-of-ulysses(action&adventure).epub",
       illustration: "illustration/lamb-adventures-of-ulysses.jpg",
-      star: 0,
-      numberReview: 0,
       price: 10,
     });
   } catch (error) {
@@ -320,8 +290,6 @@ async function seedBooks() {
       subject: BookSubject.Adventure,
       epub: "reading-bucket/henty-a-final-reckoning-illustrations(action&adventure).epub",
       illustration: "illustration/henty-a-final-reckoning.jpg",
-      star: 0,
-      numberReview: 0,
       price: 5,
     });
   } catch (error) {
@@ -338,8 +306,6 @@ async function seedBooks() {
       subject: BookSubject.Romance,
       epub: "reading-bucket/haggard-ayesha(romance).epub",
       illustration: "illustration/haggard-ayesha.jpg",
-      star: 0,
-      numberReview: 0,
       price: 9,
     });
   } catch (error) {
@@ -355,8 +321,6 @@ async function seedBooks() {
       subject: BookSubject.Romance,
       epub: "reading-bucket/poe-black-cat(romance).epub",
       illustration: "illustration/poe-ligeia.jpg",
-      star: 0,
-      numberReview: 0,
       price: 10,
     });
   } catch (error) {
@@ -372,8 +336,6 @@ async function seedBooks() {
       subject: BookSubject.Romance,
       epub: "reading-bucket/poe-black-cat(romance).epub",
       illustration: "illustration/poe-black-cat.jpg",
-      star: 0,
-      numberReview: 0,
       price: 19,
     });
   } catch (error) {
@@ -389,8 +351,6 @@ async function seedBooks() {
       subject: BookSubject.Romance,
       epub: "reading-bucket/hawthorne-house-of-the-seven-gables(romance).epub",
       illustration: "illustration/hawthorne-house-of-the-seven-gables.jpg",
-      star: 0,
-      numberReview: 0,
       price: 22,
     });
   } catch (error) {

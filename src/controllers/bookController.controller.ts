@@ -70,14 +70,27 @@ async function getAllBookInfo(req, res) {
       );
     }
 
-    const records = queryResult.map((record) => {
-      const { objectName } = cloneIllustration(record.illustration);
+    const records = await Promise.all(
+      queryResult.map(async (record) => {
+        const { objectName } = cloneIllustration(record.illustration);
+        const review = await Review.find({
+          book: record._id,
+        });
 
-      return {
-        ...record,
-        illustration: "http://localhost:3200/public/" + objectName,
-      };
-    });
+        // Avarage all review
+        const averageReviewStar =
+          review.reduce((n, { star }) => n + star, 0) / review.length;
+
+        return {
+          ...record,
+          illustration: "http://localhost:3200/public/" + objectName,
+          numOfStar: averageReviewStar.toFixed(1),
+          numOfReview: review.length,
+        };
+      })
+    );
+
+    console.log(records);
 
     return res.status(200).send({
       books: records,
@@ -118,10 +131,20 @@ async function bookDetailInfo(req, res) {
       { lean: true }
     );
 
+    const review = await Review.find({
+      book: record._id,
+    });
+
+    // Avarage all review
+    const averageReviewStar =
+      review.reduce((n, { star }) => n + star, 0) / review.length;
+
     const { objectName } = cloneIllustration(record.illustration);
     record = {
       ...record,
       illustration: "http://localhost:3200/public/" + objectName,
+      numOfStar: averageReviewStar.toFixed(1),
+      numOfReview: review.length,
     };
 
     return res.status(200).send({

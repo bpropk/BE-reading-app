@@ -12,8 +12,6 @@ const BookSchema = new mongoose.Schema({
   illustration: String,
   epub: String,
 
-  star: Number,
-  numberReview: Number,
   price: Number,
 });
 
