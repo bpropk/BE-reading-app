@@ -47,6 +47,14 @@ router.post(
   }
 );
 
+router.get(
+  "/review/:bookId",
+  authMiddleware.userAuth,
+  (req: Request, res: Response) => {
+    bookController.allreview(req, res);
+  }
+);
+
 module.exports = router;
 
 export {};

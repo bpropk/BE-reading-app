@@ -187,6 +187,7 @@ async function addReview(req, res) {
 async function likeReview(req, res) {
   var user = await getUser(req);
   const { reviewId } = req.body;
+  console.log(reviewId);
 
   const review = await Review.findById({
     _id: reviewId,
@@ -209,11 +210,42 @@ async function likeReview(req, res) {
   }
 }
 
+async function allreview(req, res) {
+  var user = await getUser(req);
+
+  const reviews = await Review.find({
+    book: req.params.bookId,
+  }).populate("user");
+
+  const records = reviews.map((item) => {
+    if (item.like.includes(user._id)) {
+      return {
+        ...item._doc,
+        isAlreadyLike: true,
+        user: user.name,
+        like: item.like.length,
+      };
+    } else {
+      return {
+        ...item._doc,
+        isAlreadyLike: false,
+        user: user.name,
+        like: item.like.length,
+      };
+    }
+  });
+
+  return res.status(200).send({
+    reviews: records,
+  });
+}
+
 module.exports = {
   getAllBookInfo,
   readBook,
   bookDetailInfo,
   addLibrary,
+  allreview,
   addReview,
   likeReview,
 };
