@@ -1,9 +1,12 @@
 import * as jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const Minio = require("minio");
 const { User } = require("@schemas/users");
 const { Book } = require("@schemas/books");
+const { Review } = require("@schemas/reviews");
 const fs = require("fs");
+const reviewModel = mongoose.model("review", Review.ReviewSchema);
 
 const minioClient = new Minio.Client({
   endPoint: "localhost",
@@ -156,11 +159,63 @@ async function addLibrary(req, res) {
   }
 }
 
+async function addReview(req, res) {
+  var user = await getUser(req);
+  const { comment, star, bookId } = req.body;
+
+  try {
+    const book = await Book.findById({
+      _id: bookId,
+    });
+
+    await reviewModel.create({
+      user,
+      book,
+      star,
+      review: comment,
+      like: [],
+    });
+
+    return res.status(200).send({
+      message: "Add review success",
+    });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+}
+
+async function likeReview(req, res) {
+  var user = await getUser(req);
+  const { reviewId } = req.body;
+
+  const review = await Review.findById({
+    _id: reviewId,
+  });
+
+  const notExist = review.like.every(
+    (item) => item._id.toString() !== user._id.toString()
+  );
+
+  if (notExist) {
+    review.like = [...review.like, user];
+    await review.save();
+    return res.status(200).send({
+      message: "Like review success",
+    });
+  } else {
+    return res.status(400).send({
+      message: "You already like this review",
+    });
+  }
+}
+
 module.exports = {
   getAllBookInfo,
   readBook,
   bookDetailInfo,
   addLibrary,
+  addReview,
+  likeReview,
 };
 
 export {};
