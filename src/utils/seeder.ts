@@ -25,13 +25,62 @@ async function seedUser() {
     console.log("Admin Account have been add");
   }
 
+  // user 1
   try {
     await userModel.create({
       username: "user",
       password: hashPassword,
-      phone: "0909754993",
+      phone: "0909754995",
       email: "bpropk2@gmail.com",
-      name: "Trần Thanh Bình",
+      name: "Binh Tran",
+      dateOfBirth: "2000-12-20",
+      address: "83/21 Đào Tông Nguyên",
+      role: UserRole.User,
+      status: UserStatus.Active,
+      currentbudget: 0,
+      library: [],
+      lock: {
+        lockCount: 0,
+        lockWrongPassword: 0,
+        date: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log("User Account have been add");
+  }
+
+  // user 2
+  try {
+    await userModel.create({
+      username: "user2",
+      password: hashPassword,
+      phone: "0913801901",
+      email: "Bbinhtony@gmail.com",
+      name: "Tony",
+      dateOfBirth: "2000-12-20",
+      address: "83/21 Đào Tông Nguyên",
+      role: UserRole.User,
+      status: UserStatus.Active,
+      currentbudget: 0,
+      library: [],
+      lock: {
+        lockCount: 0,
+        lockWrongPassword: 0,
+        date: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log("User Account have been add");
+  }
+
+  // user 3
+  try {
+    await userModel.create({
+      username: "user3",
+      password: hashPassword,
+      phone: "09792372302",
+      email: "Pmdang@gmail.com",
+      name: "Dang",
       dateOfBirth: "2000-12-20",
       address: "83/21 Đào Tông Nguyên",
       role: UserRole.User,

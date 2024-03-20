@@ -1,6 +1,11 @@
-# e-wallet BE
+# BE READING-APP
 
 1. yarn install
 2. create .env from template .env.template
 3. connect moongoose port mongodb://localhost:27017/e-wallet
 4. yarn run start
+
+# MINIO
+
+1. brew install minio
+2. minio server start
