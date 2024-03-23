@@ -56,10 +56,10 @@ const start = async () => {
     mongoose.set("debug", true);
 
     // seedUser
-    await seeder.seedUser();
+    // await seeder.seedUser();
 
     // seedBook
-    await seeder.seedBooks();
+    // await seeder.seedBooks();
 
     app.listen(port, "0.0.0.0", () => {
       console.log(`Example app listening at http://localhost:${port}`);

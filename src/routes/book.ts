@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 
 const express = require("express");
 const router = express.Router();
+
 const bookController = require("@controllers/bookController.controller");
+const auditMiddleware = require("@controllers/auditController.controller");
+
 const authMiddleware = require("@middlewares/authMiddleware.controller");
 
 // List book
@@ -52,6 +55,22 @@ router.get(
   authMiddleware.userAuth,
   (req: Request, res: Response) => {
     bookController.allreview(req, res);
+  }
+);
+
+router.post(
+  "/audit",
+  authMiddleware.userAuth,
+  (req: Request, res: Response) => {
+    auditMiddleware.generateAudit(req, res);
+  }
+);
+
+router.get(
+  "/audit/:bookId",
+  authMiddleware.userAuth,
+  (req: Request, res: Response) => {
+    auditMiddleware.getAudit(req, res);
   }
 );
 
